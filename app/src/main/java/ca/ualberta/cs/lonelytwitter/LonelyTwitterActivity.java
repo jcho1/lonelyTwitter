@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+
 public class LonelyTwitterActivity extends Activity {
 
 	private static final String FILENAME = "file.sav";
@@ -37,9 +38,28 @@ public class LonelyTwitterActivity extends Activity {
 		saveButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
+
 				setResult(RESULT_OK);
 				String text = bodyText.getText().toString();
-				saveInFile(text, new Date(System.currentTimeMillis()));
+                ArrayList<Tweet> arrayList = new ArrayList<Tweet>();
+
+				try {
+					Tweet tweet = new NormalTweet("First tweet");
+					tweet.setMessage("fuck bitches, get money");
+					ImportantTweet importantTweet = new ImportantTweet("Very Important");
+					importantTweet.setMessage("very very important");
+
+                    // setting moods
+                    importantTweet.addHappyMood();
+
+                    arrayList.add(tweet);
+                    arrayList.add(importantTweet);
+
+                } catch (TweetTooLongException e) {
+					e.printStackTrace();
+				}
+
+                saveInFile(text, new Date(System.currentTimeMillis()));
 				finish();
 
 			}
