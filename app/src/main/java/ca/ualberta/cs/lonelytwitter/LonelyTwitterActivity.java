@@ -98,6 +98,7 @@ public class LonelyTwitterActivity extends Activity {
             throw new RuntimeException();
 		}
 		//return tweets.toArray(new String[tweets.size()]);
+
 	}
 	
 	private void saveInFile() {
