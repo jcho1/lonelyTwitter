@@ -2,12 +2,14 @@ package ca.ualberta.cs.lonelytwitter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,7 +46,18 @@ public class LonelyTwitterActivity extends Activity {
 
 		bodyText = (EditText) findViewById(R.id.body);
 		Button saveButton = (Button) findViewById(R.id.save);
+        Button clearButton = (Button) findViewById(R.id.clear);
 		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+
+                tweetlist.clear();
+                adapter.notifyDataSetChanged();
+                saveInFile();
+            }
+        });
 
 		saveButton.setOnClickListener(new View.OnClickListener() {
 
@@ -75,20 +88,20 @@ public class LonelyTwitterActivity extends Activity {
 		super.onStart();
 		//String[] tweets = loadFromFile();
 
-        tweetlist = new ArrayList<Tweet>();
+        loadFromFile();
         adapter = new ArrayAdapter<Tweet>(this,
 				R.layout.list_item, tweetlist);
 		oldTweetsList.setAdapter(adapter);
 	}
 
 	private void loadFromFile() {
-		ArrayList<String> tweets = new ArrayList<String>();
+		//ArrayList<String> tweets = new ArrayList<String>();
 		try {
 			FileInputStream fis = openFileInput(FILENAME);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Tweet>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<NormalTweet>>(){}.getType();
             tweetlist = gson.fromJson(in,listType);
 
 		} catch (FileNotFoundException e) {
@@ -117,4 +130,5 @@ public class LonelyTwitterActivity extends Activity {
             throw new RuntimeException();
 		}
 	}
+
 }
